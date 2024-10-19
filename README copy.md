@@ -1,2 +1,0 @@
-# gh-oidc
-practice oidc
