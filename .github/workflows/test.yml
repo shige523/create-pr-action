@@ -1,0 +1,39 @@
+name: test action
+on: pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env :
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup
+        # push対象のダミーファイルを作成
+        run: date > foo.md
+      - name: excersice
+        # actionを実行してTestという名称のPRを作成する
+        id: excersice
+        uses: ./
+        with:
+          message: Test
+      - name: verify
+        # 作成したTestというタイトルのPRがあるかどうかを確認する
+        run: |
+          set -x
+          test "$(gh pr view "${BRANCH}" --json title --jq .title)" = "Test"
+        env:
+          # actionsのoutput値のブランチを指定
+          BRANCH: $ {{ steps.excersice.outputs.branch }}
+      - name: teardown
+        # always()を指定することでteadownは必ず実行する
+        if: ${{ always() }}
+        # PRをクローズして、リモートブランチを削除する
+        run: |
+          gh pr close "${BRANVH}" || true
+          git push origin "${BRANVH}" --delete || true
+        env:
+          BRANCH: $ {{ steps.excersice.outputs.branch }}
