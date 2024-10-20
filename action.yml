@@ -17,7 +17,7 @@ runs:
       env:
         USERNAME: github-actions[bot]
         EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-        MESSSAGE: ${{ inputs.messge }}
+        MESSSAGE: ${{ inputs.message }}
         BRANCH: auto/${{ github.run_id }}/${{ github.run_attempt }}
         GITHUB_TOKEN: ${{ github.token }}
       run: |
