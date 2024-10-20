@@ -34,6 +34,6 @@ jobs:
         # PRをクローズして、リモートブランチを削除する
         run: |
           gh pr close "${BRANVH}" || true
-          gh push origin "${BRANVH}" --delete || true
+          git push origin "${BRANVH}" --delete || true
         env:
           BRANCH: $ {{ steps.excersice.outputts.branch }}
